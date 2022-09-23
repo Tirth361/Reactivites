@@ -15,21 +15,22 @@ interface Props {
     editMode: Boolean;
     createOrEditActivity : (activity : Activity) => void;
     deleteActivity : (id:string) => void;
+    submitting : boolean;
 }
 
-const ActivityDashBoard = ({activites , selectedActivity , selectActivity , cancelActivity,openForm,closeForm,editMode,createOrEditActivity,deleteActivity} : Props) => {
+const ActivityDashBoard = ({activites , selectedActivity , selectActivity , cancelActivity,openForm,closeForm,editMode,createOrEditActivity,deleteActivity,submitting} : Props) => {
     return (
         <>
             <Grid>
                 <GridColumn width={10}>
-                    <ActivityList activites={activites} selectActivity = {selectActivity} deleteActivity = {deleteActivity} />
+                    <ActivityList activites={activites} selectActivity = {selectActivity} deleteActivity = {deleteActivity} submitting = {submitting} />
                 </GridColumn>
                 <GridColumn width={6}>
                     {
                         selectedActivity && !editMode && <ActivityDetail activity = {selectedActivity} cancelActivity = {cancelActivity} openForm = {openForm}   />
                     }
                     {
-                        editMode && <ActivityForm closeForm = {closeForm} activity = {selectedActivity} createOrEditActivity = {createOrEditActivity}  />
+                        editMode && <ActivityForm closeForm = {closeForm} activity = {selectedActivity} createOrEditActivity = {createOrEditActivity} submitting = {submitting} />
                     }
                 </GridColumn>
             </Grid>
