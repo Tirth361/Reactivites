@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom/client';
 import 'semantic-ui-css/semantic.min.css'
 import App from './app/layout/App';
 import '../src/app/layout/index.css'
+import { store, StoreContext } from './app/stores/store';
+import { BrowserRouter } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <App />
+  <StoreContext.Provider value={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StoreContext.Provider>
 );

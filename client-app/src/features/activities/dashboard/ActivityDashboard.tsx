@@ -1,41 +1,35 @@
-import React from "react";
-import { Grid, GridColumn, List, ListItem } from "semantic-ui-react";
-import { Activity } from "../../../app/model/activity";
+import { Grid, GridColumn } from "semantic-ui-react";
+import { useStore } from "../../../app/stores/store";
 import ActivityDetail from "../details/ActivityDetail";
 import ActivityForm from "../form/ActivityForm";
 import ActivityList from "./ActivityList";
+import {observer} from 'mobx-react-lite'
+import { useEffect } from "react";
+import LoadingComponents from "../../../app/layout/LoadingComponents";
 
-interface Props {
-    activites : Activity[];
-    selectedActivity : Activity | undefined;
-    selectActivity : (id : string) => void;
-    cancelActivity : () => void;
-    openForm : (id : string) => void;
-    closeForm : () => void;
-    editMode: Boolean;
-    createOrEditActivity : (activity : Activity) => void;
-    deleteActivity : (id:string) => void;
-    submitting : boolean;
-}
 
-const ActivityDashBoard = ({activites , selectedActivity , selectActivity , cancelActivity,openForm,closeForm,editMode,createOrEditActivity,deleteActivity,submitting} : Props) => {
+const ActivityDashBoard = () => {
+    const {activityStore} = useStore();
+    const {loadActivites , activityRegistry } = activityStore;
+
+    useEffect(() => {
+        if(activityRegistry.size <= 1) loadActivites();
+      },[activityRegistry.size , loadActivites])
+
+      if(activityStore.loadingInitial) return <LoadingComponents content="Loading app" />
+      
     return (
         <>
             <Grid>
                 <GridColumn width={10}>
-                    <ActivityList activites={activites} selectActivity = {selectActivity} deleteActivity = {deleteActivity} submitting = {submitting} />
+                    <ActivityList />
                 </GridColumn>
                 <GridColumn width={6}>
-                    {
-                        selectedActivity && !editMode && <ActivityDetail activity = {selectedActivity} cancelActivity = {cancelActivity} openForm = {openForm}   />
-                    }
-                    {
-                        editMode && <ActivityForm closeForm = {closeForm} activity = {selectedActivity} createOrEditActivity = {createOrEditActivity} submitting = {submitting} />
-                    }
+                    <h2>Activity filter</h2>
                 </GridColumn>
             </Grid>
         </>
     )
 }
 
-export default ActivityDashBoard;
+export default observer(ActivityDashBoard)
