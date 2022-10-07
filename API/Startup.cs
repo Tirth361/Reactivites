@@ -1,8 +1,11 @@
 using API.Middleware;
+using API.Services;
 using Application.Activites;
 using Application.Cores;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Persistence;
@@ -22,9 +25,15 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddFluentValidation(config => {
+            services.AddControllers( opt => 
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddFluentValidation(config => {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
-            });
+            }); 
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -37,6 +46,9 @@ namespace API
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
+
+            services.AddIdentityServices(Configuration);
+
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         }
@@ -57,6 +69,8 @@ namespace API
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

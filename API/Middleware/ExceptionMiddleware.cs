@@ -34,13 +34,6 @@ namespace API.Middleware
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
-                // var responce = new ProblemDetails
-                // {
-                //     Status = 500,
-                //     Detail = _env.IsDevelopment() ? ex.StackTrace?.ToString() : null,
-                //     Title = ex.Message,
-                // };
-
 
                 var response = _env.IsDevelopment() 
                     ? new AppExecption(context.Response.StatusCode , ex.Message , ex.StackTrace?.ToString())

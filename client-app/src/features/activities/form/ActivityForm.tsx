@@ -1,12 +1,12 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Header, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/model/activity";
 import { useStore } from "../../../app/stores/store";
 import { observer } from 'mobx-react-lite'
-import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import LoadingComponents from "../../../app/layout/LoadingComponents";
 import { v4 as uuid } from 'uuid'
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from 'yup'
 import MyTextInput from "../../../app/common/form/MyTextInput";
 import MytextArea from "../../../app/common/form/MyTextArea";
