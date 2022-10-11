@@ -17,9 +17,9 @@ const ActivityDashBoard = () => {
         if(activityRegistry.size <= 1) loadActivites();
       },[activityRegistry.size , loadActivites])
 
-      if(activityStore.loadingInitial) return <LoadingComponents content="Loading app" />
+      if(activityStore.loadingInitial) return <LoadingComponents content="Loading activities" />
       
-    return (
+    return ( 
         <>
             <Grid>
                 <GridColumn width={10}>
