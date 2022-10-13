@@ -2,7 +2,9 @@ using API.Middleware;
 using API.Services;
 using Application.Activites;
 using Application.Cores;
+using Application.Interface;
 using FluentValidation.AspNetCore;
+using Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -46,7 +48,7 @@ namespace API
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
-
+            services.AddScoped<IUserAccessor , UserAccessor>();
             services.AddIdentityServices(Configuration);
 
             services.AddMediatR(typeof(List.Handler).Assembly);
