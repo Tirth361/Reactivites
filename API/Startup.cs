@@ -5,12 +5,15 @@ using Application.Cores;
 using Application.Interface;
 using FluentValidation.AspNetCore;
 using Infrastructure;
+using Infrastructure.Photos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using Microsoft.Extensions.DependencyInjection;
+using Application.Photos;
 
 namespace API
 {
@@ -48,11 +51,13 @@ namespace API
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
-            services.AddScoped<IUserAccessor , UserAccessor>();
-            services.AddIdentityServices(Configuration);
 
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddScoped<IUserAccessor , UserAccessor>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+            services.AddScoped<IPhotoAccessor , PhotoAccessor>();
+            services.AddIdentityServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
