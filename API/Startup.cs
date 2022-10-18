@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Photos;
+using API.SignalR;
 
 namespace API
 {
@@ -48,7 +49,7 @@ namespace API
             });
             services.AddCors(opt => {
                 opt.AddPolicy("CorsPolicy" , policy => {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
                 });
             });
 
@@ -56,6 +57,7 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IUserAccessor , UserAccessor>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+            services.AddSignalR();
             services.AddScoped<IPhotoAccessor , PhotoAccessor>();
             services.AddIdentityServices(Configuration);
         }
@@ -84,6 +86,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
