@@ -2,7 +2,6 @@ import  { HubConnection, HubConnectionBuilder, LogLevel  } from "@microsoft/sign
 import { makeAutoObservable, runInAction } from "mobx";
 import { ChatComment } from "../model/comments";
 import { store } from "./store";
-import * as signalR from "@microsoft/signalr";
 
 export default class CommentStore {
     comments: ChatComment[] = []

@@ -90,7 +90,9 @@ const sleep = (delay : number) => {
       })
    },
    setMainPhoto : (id : string) => request.post(`/photos/${id}/setMain` , {}),
-   deletePhoto : (id : string) => request.del(`/photos/${id}`)
+   deletePhoto : (id : string) => request.del(`/photos/${id}`),
+   updateFollowing : (username : string) => request.post(`/follow/${username}` , {}),
+   listFollowings : (username : string , predicate : string) => request.get<Profile[]>(`/follow/${username}?predicate=${predicate}`) 
  }
 
  const agent = {

@@ -9,6 +9,7 @@ using Application.Cores;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Application.Interface;
 
 namespace Application.Activites
 {
@@ -23,17 +24,19 @@ namespace Application.Activites
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context , IMapper mapper)
+            public Handler(DataContext context , IMapper mapper , IUserAccessor userAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<ActivitiyDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities
-                .ProjectTo<ActivitiyDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ActivitiyDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername()})
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
                 return Result<ActivitiyDto>.Success(activity);
             }
